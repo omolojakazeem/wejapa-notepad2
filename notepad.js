@@ -1,12 +1,11 @@
 let http = require("http");
-var fs = require("fs");
+let fs = require("fs");
 const repl = require("repl");
 const { parse } = require("querystring");
 const path = require("path");
 const basePath = __dirname;
 
-var assets = path.join(basePath, "assets");
-var names = path.join(basePath, "names");
+let assets = path.join(basePath, "assets");
 
 const hostname = "127.0.0.1";
 const port = process.env.PORT || 8000;
@@ -22,7 +21,7 @@ let thisSite = http.createServer(function (req, res) {
         } else {
           res.writeHead(200, { "Content-Type": "text/html" });
           res.write(data);
-          const directoryPath = path.join(__dirname, "names");
+          const directoryPath = path.join(__dirname, "notes");
           //passsing directoryPath and callback function
           fs.readdir(directoryPath, function (err, files) {
             //handling error
@@ -31,8 +30,13 @@ let thisSite = http.createServer(function (req, res) {
             }
             //listing all files using forEach
             files.forEach(function (file) {
+              data += file;
               // Do whatever you want to do with the file
+              console.log(file);
+              res.write(`<ul>
+              <li>${file}</li> </ul>`);
             });
+            res.end();
           });
         }
       });
